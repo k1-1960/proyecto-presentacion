@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="events" id="events" />
+    <link rel="stylesheet" href="./fonts/Geist/fontfaces.css" type="text/css" />
+
+    <title>Titulo de la página</title>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- Script to set the color schema -->
+    <script>
+      const html = document.getElementsByTagName('html').item(0);
+      const head = document.getElementsByTagName('head').item(0);
+
+      const meta = document.createElement('meta');
+      meta.name = 'prefers-color-scheme';
+      meta.id = 'pcs';
+      let l = document.getElementById('events');
+      /**
+       * e {CustomEvent}
+       */
+      l.addEventListener('onThemeChange', (e) => {
+        console.log(e);
+        meta.content = e.detail.newTheme;
+      });
+      const theme = window.localStorage.getItem('theme');
+      if (theme) {
+        html.classList.add(theme);
+        meta.content = theme;
+        head.appendChild(meta);
+      } else {
+        if (
+          window.matchMedia &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches
+        ) {
+          html.classList.add('dark');
+          meta.content = 'dark';
+          head.appendChild(meta);
+          window.localStorage.setItem('theme', 'dark');
+        } else if (
+          window.matchMedia &&
+          window.matchMedia('(prefers-color-scheme: light)').matches
+        ) {
+          html.classList.add('light');
+          meta.content = 'light';
+          head.appendChild(meta);
+          window.localStorage.setItem('theme', 'light');
+        }
+      }
+    </script>
+  </body>
+</html>
